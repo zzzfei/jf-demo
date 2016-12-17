@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.atguigu.jf.console.baseapi.common.ItemTypeMapper">
+	
+	<resultMap id="BaseResultMap" type="com.atguigu.jf.console.common.bean.pojo.ItemType" >
+	    <id column="ITEM_TYPE" property="itemType" jdbcType="DECIMAL" />
+	    <result column="ITEM_TYPE_NAME" property="itemTypeName" jdbcType="VARCHAR" />
+	    <result column="DATA_STATE" property="dataState" jdbcType="DECIMAL" />
+    </resultMap>
+	
+	<select id="getItemType" resultMap="BaseResultMap">
+		SELECT * FROM `ic_item_type` 
+		WHERE DATA_STATE = 1
+	</select>
+
+</mapper>

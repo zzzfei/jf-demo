@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.atguigu.jf.console.baseapi.item.ItemEvaluationMapper" >
+	
+	<resultMap type="com.atguigu.jf.console.item.bean.bo.ItemEvaluationBean"
+			   id="BaseResultMap">
+		<id column="EVALUATION_ID" property="evaluationId" />
+		<result column="USER_NICKNAME" property="userNickName" />		   
+		<result column="ITEM_NAME" property="itemName" />		   
+		<result column="ITEM_PIC_URL" property="itemPicUrl" />		   
+		<result column="EVALUATION_GRADE" property="evaluationGrade" />		   
+		<result column="EVALUATION_CONTENT" property="evaluationContent" />		   
+		<result column="ITEM_PIC_URL_EV" property="itemPicUrlEv" />
+		<result column="MCHT_NAME" property="mchtName" />		   
+		<result column="EVALUATION_TIME" property="evaluationTime" />		   
+		<result column="EVALUATION_STATUS" property="evaluationStatus" />		   
+		<result column="DATA_STATE" property="dataState" />		   
+	</resultMap>
+	
+	<select id="getItemEvaluation" resultMap="BaseResultMap" parameterType="map">
+		SELECT DISTINCT e.`EVALUATION_ID`,
+		e.`USER_NICKNAME`,
+		i.`ITEM_NAME`,
+		ip.`ITEM_PIC_URL`,
+		e.`EVALUATION_GRADE`,
+		e.`EVALUATION_CONTENT`,
+		ep.`ITEM_PIC_URL_EV`,
+		m.`MCHT_NAME`,
+		e.`EVALUATION_TIME`,
+		e.`EVALUATION_STATUS` 
+		FROM `ic_item_evaluation` e, `ic_item_evaluation_pic` ep, `ic_item` i, `ic_item_picture` ip, `sc_merchant` m
+		WHERE e.`ITEM_ID`=i.`ITEM_ID`
+		AND i.`ITEM_ID`=ip.`ITEM_ID`
+		AND e.`EVALUATION_ID`=ep.`EVALUATION_ID`
+		AND e.`MCHT_ID`=m.`MCHT_ID`
+		AND e.`DATA_STATE`=1
+		<if test="evaluationStatus!=null">
+			AND e.`EVALUATION_STATUS`=#{evaluationStatus}
+		</if>
+		<if test="userNickName!=null">
+			AND e.`USER_NICKNAME`=#{userNickName}
+		</if>
+	</select>
+	
+	<update id="update" parameterType="com.atguigu.jf.console.item.bean.bo.ItemEvaluationBean">
+		UPDATE `ic_item_evaluation`
+		<set>
+			<if test="evaluationStatus!=null">
+				EVALUATION_STATUS = #{evaluationStatus}
+			</if>
+			<if test="dataState!=null">
+				DATA_STATE = #{dataState}
+			</if>
+		</set>
+		where EVALUATION_ID = #{evaluationId}
+	</update>
+	
+	<select id="getItemEvaluationById" parameterType="long" resultMap="BaseResultMap">
+		SELECT DISTINCT e.`EVALUATION_ID`,
+		e.`USER_NICKNAME`,
+		i.`ITEM_NAME`,
+		ip.`ITEM_PIC_URL`,
+		e.`EVALUATION_GRADE`,
+		e.`EVALUATION_CONTENT`,
+		ep.`ITEM_PIC_URL_EV`,
+		m.`MCHT_NAME`,
+		e.`EVALUATION_TIME`,
+		e.`EVALUATION_STATUS` 
+		FROM `ic_item_evaluation` e, `ic_item_evaluation_pic` ep, `ic_item` i, `ic_item_picture` ip, `sc_merchant` m
+		WHERE e.`ITEM_ID`=i.`ITEM_ID`
+		AND i.`ITEM_ID`=ip.`ITEM_ID`
+		AND e.`EVALUATION_ID`=ep.`EVALUATION_ID`
+		AND e.`MCHT_ID`=m.`MCHT_ID`
+		AND e.EVALUATION_ID = #{evaluationId}
+	</select>
+	
+</mapper>
